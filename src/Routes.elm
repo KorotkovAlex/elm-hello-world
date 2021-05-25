@@ -47,9 +47,11 @@ pathFor route =
             "/"
 
 
+playersPath : String
 playersPath =
     pathFor PlayersRoute
 
 
+playerPath : String -> String
 playerPath id =
     pathFor (PlayerRoute id)

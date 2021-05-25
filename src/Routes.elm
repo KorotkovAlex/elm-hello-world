@@ -7,6 +7,7 @@ import Url.Parser exposing (..)
 type Route
     = PlayersRoute
     | PlayerRoute String
+    | HelloRoute
     | NotFoundRoute
 
 
@@ -16,6 +17,7 @@ matchers =
         [ map PlayersRoute top
         , map PlayerRoute (s "players" </> string)
         , map PlayersRoute (s "players")
+        , map HelloRoute (s "hello")
         ]
 
 
@@ -37,6 +39,9 @@ pathFor route =
 
         PlayerRoute id ->
             "/players/" ++ id
+
+        HelloRoute ->
+            "/hello"
 
         NotFoundRoute ->
             "/"

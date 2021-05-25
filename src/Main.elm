@@ -6,11 +6,12 @@ import Html exposing (Html, a, div, section, text)
 import Html.Attributes exposing (class, href)
 import Pages.Edit as Edit
 import Pages.List as List
+import Pages.Hello as Hello
 import Routes exposing (Route)
 import Shared exposing (..)
 import Url exposing (Url)
 
-
+import Debug exposing (log)
 type alias Model =
     { flags : Flags
     , navKey : Key
@@ -23,6 +24,7 @@ type Page
     = PageNone
     | PageList List.Model
     | PageEdit Edit.Model
+    | PageHello Hello.Model
 
 
 type Msg
@@ -65,9 +67,17 @@ loadCurrentPage ( model, cmd ) =
                     in
                     ( PageEdit pageModel, Cmd.map EditMsg pageCmd )
 
+                Routes.HelloRoute ->
+                    let
+                        ( pageModel, pageCmd ) =
+                            Hello.init
+                    in
+                    ( PageHello pageModel, pageCmd )
+
                 Routes.NotFoundRoute ->
                     ( PageNone, Cmd.none )
     in
+    log "debug - loadCurrentPage"
     ( { model | page = page }, Cmd.batch [ cmd, newCmd ] )
 
 
@@ -75,10 +85,14 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.page of
         PageList pageModel ->
+            log "debug - subscriptions"
             Sub.map ListMsg (List.subscriptions pageModel)
 
         PageEdit pageModel ->
             Sub.map EditMsg (Edit.subscriptions pageModel)
+
+        PageHello pageModel ->
+            Sub.none
 
         PageNone ->
             Sub.none
@@ -90,6 +104,7 @@ update msg model =
         ( OnUrlRequest urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
+                    log "debug - update OnUrlRequest Browser.Internal"
                     ( model
                     , Nav.pushUrl model.navKey (Url.toString url)
                     )
@@ -112,6 +127,7 @@ update msg model =
                 ( newPageModel, newCmd ) =
                     List.update subMsg pageModel
             in
+            log "debug - update ListMsg subMsg, PageList pageModel"
             ( { model | page = PageList newPageModel }
             , Cmd.map ListMsg newCmd
             )
@@ -150,6 +166,7 @@ main =
 
 view : Model -> Browser.Document Msg
 view model =
+    log "debug - view"
     { title = "App"
     , body = [ currentPage model ]
     }
@@ -161,12 +178,16 @@ currentPage model =
         page =
             case model.page of
                 PageList pageModel ->
+                    log "debug - currentPage"
                     List.view pageModel
                         |> Html.map ListMsg
 
                 PageEdit pageModel ->
                     Edit.view pageModel
                         |> Html.map EditMsg
+
+                PageHello pageModel ->
+                    Hello.view pageModel
 
                 PageNone ->
                     notFoundView
@@ -175,7 +196,6 @@ currentPage model =
         [ nav model
         , page
         ]
-
 
 nav : Model -> Html Msg
 nav model =
@@ -189,6 +209,9 @@ nav model =
                     [ linkToList
                     ]
 
+                Routes.HelloRoute ->
+                    [ text "Hello route"]
+
                 Routes.NotFoundRoute ->
                     [ linkToList
                     ]
@@ -196,6 +219,7 @@ nav model =
         linkToList =
             a [ href Routes.playersPath, class "text-white" ] [ text "List" ]
     in
+    log "debug - nav"
     div
         [ class "mb-2 text-white bg-black p-4" ]
         links

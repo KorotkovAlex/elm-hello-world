@@ -49,19 +49,6 @@ fetchPlayers flags =
         url = (flags.api ++ "/players")
         , expect = Http.expectJson OnFetchPlayers (Decode.list Player.decoder)
     }
-    -- Http.get (flags.api ++ "/players") (Decode.list Player.decoder)
-    --     |> Http.send OnFetchPlayers
-
-
--- Http.post
--- { url = "url"
--- , body =body,
--- , expect = Http.expectJson Created decoder
--- }
-
-
--- VIEWS
-
 
 view : Model -> Html Msg
 view model =

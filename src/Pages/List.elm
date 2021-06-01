@@ -1,26 +1,29 @@
-module Pages.List exposing (Model, Msg, init, subscriptions, update, view)
+module Pages.List exposing (Msg, Model, init, subscriptions, update, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
+import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode
 import Player exposing (Player)
 import Routes
 import Shared exposing (..)
 
-
 type alias Model =
-    { players : RemoteData (List Player)
+    {
+        players : RemoteData (List Player),
+        isShowText : Bool
     }
 
 
 type Msg
     = OnFetchPlayers (Result Http.Error (List Player))
+    | OnPressButton
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { players = Loading }, fetchPlayers flags )
+    ( { players = Loading, isShowText = False  }, fetchPlayers flags )
 
 
 subscriptions : Model -> Sub Msg
@@ -37,9 +40,14 @@ update msg model =
         OnFetchPlayers (Err err) ->
             ( { model | players = Failure }, Cmd.none )
 
+        OnPressButton ->
+            ( {model | isShowText = (not model.isShowText) }, Cmd.none)
+
 
 
 -- DATA
+
+
 
 
 fetchPlayers : Flags -> Cmd Msg
@@ -49,6 +57,15 @@ fetchPlayers flags =
         url = (flags.api ++ "/players")
         , expect = Http.expectJson OnFetchPlayers (Decode.list Player.decoder)
     }
+
+
+htmlIf : Model -> Html Msg
+htmlIf model =
+    if model.isShowText then
+        text "I can show this text"
+
+    else
+        text ""
 
 view : Model -> Html Msg
 view model =
@@ -67,8 +84,11 @@ view model =
                 Failure ->
                     text "Error"
     in
-    section [ class "p-4" ]
-        [ content ]
+    div [] [
+        section [ class "p-4" ] [ content ]
+        , button [ onClick OnPressButton] [ text "Press me" ]
+        , htmlIf model
+    ]
 
 
 viewWithData : List Player -> Html Msg

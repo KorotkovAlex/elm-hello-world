@@ -6,6 +6,9 @@ import Models.Content exposing (Content, ContentInfo, decoder)
 import Shared exposing (..)
 import Debug exposing (log)
 import String exposing(..)
+import Html.Events exposing (onInput, onClick)
+import Html.Attributes exposing (value)
+import Html.Attributes exposing (placeholder)
 
 type alias Model =
     {
@@ -15,21 +18,24 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { content = Loading, searchText = "" }, fetchContent)
+    ( { content = NotAsked, searchText = "" }, Cmd.none)
 
 type Msg
     = OnFetchContent (Result Http.Error Content)
+    | OnInputSearchText String
+    | SearchContent
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnFetchContent (Ok players) ->
-            log("players")
             ( { model | content = Loaded players }, Cmd.none )
-
         OnFetchContent (Err err) ->
-            log("players2112")
             ( { model | content = Failure }, Cmd.none )
+        OnInputSearchText searchText ->
+            ( { model | searchText = searchText}, Cmd.none)
+        SearchContent ->
+            ( { content = Loading, searchText = "" }, fetchContent model.searchText)
 
 rowItemInfo: ContentInfo -> Html msg
 rowItemInfo contentInfo =
@@ -44,7 +50,7 @@ viewWithData content =
             div [] (List.map rowItemInfo content.results)
         ]
 
-view : Model -> Html msg
+view : Model -> Html Msg
 view model =
     let
         content =
@@ -61,13 +67,25 @@ view model =
                 Failure ->
                     text "Error"
     in
-    div [] [content]
+    div [] [
+        div [] [
+            input [
+                onInput OnInputSearchText,
+                value model.searchText,
+                placeholder "searchText"] []
+            ],
+            div [] [
+                        button [onClick SearchContent]
+                        [ text "Search"]
+                    ],
+            content
+        ]
 
 
 -- DATA
 
-fetchContent : Cmd Msg
-fetchContent =
+fetchContent : String -> Cmd Msg
+fetchContent searchText =
     Http.request
     { method = "GET"
     , headers = [
@@ -77,7 +95,7 @@ fetchContent =
         Http.header "Accept" "application/json",
         Http.header "Content-Type" "application/json"
     ]
-    , url = ("https://itunes.apple.com/search?term=" ++ "eminem")
+    , url = ("https://itunes.apple.com/search?term=" ++ searchText)
     , body = Http.emptyBody
     , expect = Http.expectJson OnFetchContent decoder
     , timeout = Nothing

@@ -99,7 +99,7 @@ currentPage model =
     let
         page =
             case model.page of
-                PageHome pageModel -> Home.view pageModel
+                PageHome pageModel -> Html.map HomeMsg (Home.view pageModel)
                 PageNone -> notFoundView
     in
     section [] [ page ]

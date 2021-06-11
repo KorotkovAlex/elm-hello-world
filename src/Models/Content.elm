@@ -13,13 +13,8 @@ type alias Content =
 type alias ContentInfo =
     {
       artistName: String,
-      kind: String,
       artworkUrl100: String,
-      collectionName: String,
-      collectionViewUrl: String,
-      currency: String,
-      trackPrice: String,
-      trackName: String
+      currency: String
     }
 
 decoder : Decode.Decoder Content
@@ -32,12 +27,7 @@ decoder =
 decoderContentInfo : Decode.Decoder ContentInfo
 decoderContentInfo =
   log("decoderContentInfo")
-    Decode.map8 ContentInfo
+    Decode.map3 ContentInfo
         (Decode.field "artistName" Decode.string)
-        (Decode.field "kind" Decode.string)
         (Decode.field "artworkUrl100" Decode.string)
-        (Decode.field "collectionName" Decode.string)
-        (Decode.field "collectionViewUrl" Decode.string)
         (Decode.field "currency" Decode.string)
-        (Decode.field "trackPrice" Decode.string)
-        (Decode.field "trackName" Decode.string)

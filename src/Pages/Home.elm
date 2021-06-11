@@ -4,7 +4,6 @@ import Html exposing (..)
 import Http
 import Models.Content exposing (Content, ContentInfo, decoder)
 import Shared exposing (..)
-import Debug exposing (log)
 import String exposing(..)
 import Html.Events exposing (onInput, onClick)
 import Html.Attributes exposing (value)

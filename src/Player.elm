@@ -1,7 +1,6 @@
 
 module Player exposing (Player, decoder, encode)
 
-import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Shared exposing (..)

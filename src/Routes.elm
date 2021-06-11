@@ -8,16 +8,18 @@ type Route
     = PlayersRoute
     | PlayerRoute String
     | HelloRoute
+    | HomeRoute
     | NotFoundRoute
 
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ map PlayersRoute top
+        [ map HomeRoute top
         , map PlayerRoute (s "players" </> string)
         , map PlayersRoute (s "players")
         , map HelloRoute (s "hello")
+        , map HomeRoute (s "home")
         ]
 
 
@@ -42,6 +44,9 @@ pathFor route =
 
         HelloRoute ->
             "/hello"
+
+        HomeRoute ->
+            "/home"
 
         NotFoundRoute ->
             "/"

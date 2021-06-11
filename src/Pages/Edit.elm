@@ -1,18 +1,13 @@
-module Pages.Edit exposing (Model, Msg, init, subscriptions, update, view)
+module Pages.Edit exposing (Model, Msg, init, update, view)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href, value)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Http
 import Player exposing (Player)
-import Routes exposing (playersPath)
 import Shared exposing (..)
 
-
-type alias Model =
-    { player : RemoteData Player
-    }
-
+type alias Model = RemoteData Player
 
 type Msg
     = OnFetchPlayer (Result Http.Error Player)
@@ -22,22 +17,16 @@ type Msg
 
 init : Flags -> String -> ( Model, Cmd Msg )
 init flags playerId =
-    ( { player = Loading }, fetchPlayer flags playerId )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
+    ( Loading, fetchPlayer flags playerId )
 
 update : Flags -> Msg -> Model -> ( Model, Cmd Msg )
 update flags msg model =
     case msg of
         OnFetchPlayer (Ok player) ->
-            ( { model | player = Loaded player }, Cmd.none )
+            ( Loaded player, Cmd.none )
 
-        OnFetchPlayer (Err err) ->
-            ( { model | player = Failure }, Cmd.none )
+        OnFetchPlayer (Err _) ->
+            ( Failure, Cmd.none )
 
         ChangeLevel player howMuch ->
             let
@@ -47,9 +36,9 @@ update flags msg model =
             ( model, savePlayer flags updatedPlayer )
 
         OnPlayerSave (Ok player) ->
-            ( { model | player = Loaded player }, Cmd.none )
+            ( Loaded player, Cmd.none )
 
-        OnPlayerSave (Err error) ->
+        OnPlayerSave (Err _) ->
             ( model, Cmd.none )
 
 
@@ -64,8 +53,6 @@ fetchPlayer flags playerId =
         url = (flags.api ++ "/players/" ++ playerId)
         , expect = Http.expectJson OnFetchPlayer (Player.decoder)
     }
-    -- Http.get (flags.api ++ "/players/" ++ playerId) Player.decoder
-    --     |> Http.send OnFetchPlayer
 
 
 savePlayer : Flags -> Player -> Cmd Msg
@@ -79,57 +66,18 @@ savePlayer flags player =
         , tracker = Nothing
         , url = savePlayerUrl flags player.id
         }
-    -- savePlayerRequest flags player
-        -- |> Http.expectString OnPlayerSave
-
-
--- savePlayerRequest : Flags -> Player -> Cmd Msg
--- savePlayerRequest flags player =
-    -- Http.request
-    -- { body = Player.encode player |> Http.jsonBody
-    -- , expect = Http.expectJson Player.decoder
-    -- , headers = []
-    -- , method = "PATCH"
-    -- , timeout = Nothing
-    -- , tracker = Nothing
-    -- , url = savePlayerUrl flags player.id
-    -- }
-
-    -- Http.request
-    -- { method = "PATCH"
-    -- , headers = []
-    -- , url = savePlayerUrl flags player.id
-    -- , body = Player.encode player |> Http.jsonBody
-    -- , expect = Http.expectJson Player.decoder
-    -- , timeout = Nothing
-    -- , tracker = Nothing
-    -- }
-
-    -- Http.request
-    --     { body = Player.encode player |> Http.jsonBody
-    --     , expect = Http.expectJson Player.decoder
-    --     , headers = []
-    --     , method = "PATCH"
-    --     , timeout = Nothing
-    --     , url = savePlayerUrl flags player.id
-    --     , withCredentials = False
-    --     }
-
 
 savePlayerUrl : Flags -> String -> String
 savePlayerUrl flags playerId =
     flags.api ++ "/players/" ++ playerId
 
-
-
 -- VIEWS
-
 
 view : Model -> Html Msg
 view model =
     let
         content =
-            case model.player of
+            case model of
                 NotAsked ->
                     text ""
 
@@ -169,28 +117,11 @@ inputLevel player =
 
 btnLevelDecrease : Player -> Html.Html Msg
 btnLevelDecrease player =
-    let
-        message =
-            ChangeLevel player -1
-    in
-    button [ class "btn ml-3 h1", onClick message ]
+    button [ class "btn ml-3 h1", onClick (ChangeLevel player -1) ]
         [ i [ class "fa fa-minus-circle" ] [] ]
 
 
 btnLevelIncrease : Player -> Html.Html Msg
 btnLevelIncrease player =
-    let
-        message =
-            ChangeLevel player 1
-    in
-    button [ class "btn ml-3 h1", onClick message ]
+    button [class "btn ml-3 h1", onClick (ChangeLevel player 1) ]
         [ i [ class "fa fa-plus-circle" ] [] ]
-
-
-listBtn : Html Msg
-listBtn =
-    a
-        [ class "btn regular"
-        , href playersPath
-        ]
-        [ i [ class "fa fa-chevron-left mr-1" ] [], text "List" ]

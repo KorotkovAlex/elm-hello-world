@@ -1,13 +1,10 @@
 module Pages.Home exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
 import Http
 import Json.Decode as Decode
 import Components.Content exposing (Content, ContentInfo, decoder)
 import Shared exposing (..)
-import Html.Attributes exposing (step)
-
 
 type alias Model =
     {
@@ -28,20 +25,20 @@ update msg model =
         OnFetchContent (Ok players) ->
             ( { model | content = Loaded players }, Cmd.none )
 
-        OnFetchContent (Err err) ->
+        OnFetchContent (Err _) ->
             ( { model | content = Failure }, Cmd.none )
 
-rowItemInfo: ContentInfo -> Html Msg
+rowItemInfo: ContentInfo -> Html msg
 rowItemInfo contentInfo =
     div []
         [ text contentInfo.artistName ]
 
-rowItem: Content -> Html Msg
+rowItem: Content -> Html msg
 rowItem content =
     div []
         (List.map rowItemInfo content.results)
 
-view : Model -> Html Msg
+view : Model -> Html msg
 view model =
     let
         content =
@@ -60,7 +57,7 @@ view model =
     in
     div [] [content]
 
-viewWithData : List Content -> Html Msg
+viewWithData : List Content -> Html msg
 viewWithData content =
     div []
         (List.map rowItem content)
@@ -72,20 +69,16 @@ fetchContent : Cmd Msg
 fetchContent =
     Http.request
     { method = "GET"
-    , headers = [Http.header "Access-Control-Allow-Origin" "*", Http.header "Access-Control-Allow-Credentials" "true", Http.header "Access-Control-Allow-Methods" "Get", Http.header "Accept" "application/json", Http.header "Content-Type" "application/json"]
+    , headers = [
+        Http.header "Access-Control-Allow-Origin" "*",
+        Http.header "Access-Control-Allow-Credentials" "true",
+        Http.header "Access-Control-Allow-Methods" "Get",
+        Http.header "Accept" "application/json",
+        Http.header "Content-Type" "application/json"
+    ]
     , url = ("https://itunes.apple.com/search?term=" ++ "eminem")
     , body = Http.emptyBody
     , expect = Http.expectJson OnFetchContent (Decode.list decoder)
     , timeout = Nothing
     , tracker = Nothing
     }
-    -- Http.get
-    -- {
-    --     url = ("http://itunes.apple.com/search?term=" ++ "eminem")
-    --     , expect = Http.expectJson OnFetchContent (Decode.list decoder)
-    -- }
-
-
-    -- Http.header "Access-Control-Allow-Origin" "*"
-    -- Http.header "Access-Control-Allow-Credentials" "true"
-    -- Http.header "Access-Control-Allow-Methods" "Get"

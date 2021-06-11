@@ -1,4 +1,4 @@
-module Pages.List exposing (Msg, Model, init, subscriptions, update, view)
+module Pages.List exposing (Msg, Model, init, update, view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
@@ -25,19 +25,13 @@ init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { players = Loading, isShowText = False  }, fetchPlayers flags )
 
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnFetchPlayers (Ok players) ->
             ( { model | players = Loaded players }, Cmd.none )
 
-        OnFetchPlayers (Err err) ->
+        OnFetchPlayers (Err _) ->
             ( { model | players = Failure }, Cmd.none )
 
         OnPressButton ->

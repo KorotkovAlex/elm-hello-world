@@ -2,7 +2,7 @@ module Pages.Home exposing (..)
 
 import Html exposing (..)
 import Http
-import Components.Content exposing (Content, ContentInfo, decoder)
+import Models.Content exposing (Content, ContentInfo, decoder)
 import Shared exposing (..)
 import Debug exposing (log)
 import String exposing(..)
@@ -35,14 +35,6 @@ rowItemInfo: ContentInfo -> Html msg
 rowItemInfo contentInfo =
     div []
         [ text contentInfo.artistName ]
-
-rowItem: Content -> Html msg
-rowItem content =
-    div []
-        [
-            text (String.fromInt content.resultCount),
-            div [] (List.map rowItemInfo content.results)
-        ]
 
 viewWithData : Content -> Html msg
 viewWithData content =

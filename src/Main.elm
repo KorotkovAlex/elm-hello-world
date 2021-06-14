@@ -7,6 +7,7 @@ import Pages.Home as Home
 import Routes exposing (Route)
 import Shared exposing (..)
 import Url exposing (Url)
+import Models.Content exposing (Content)
 
 type alias Model =
     { flags : Flags

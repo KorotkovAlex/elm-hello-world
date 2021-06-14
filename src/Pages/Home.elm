@@ -12,17 +12,19 @@ import Html.Attributes exposing (placeholder)
 type alias Model =
     {
         searchText: String,
-        content: RemoteData Content
+        content: RemoteData Content,
+        basket: List ContentInfo
     }
 
 init : ( Model, Cmd Msg )
 init =
-    ( { content = NotAsked, searchText = "" }, Cmd.none)
+    ( { content = NotAsked, searchText = "", basket = [] }, Cmd.none)
 
 type Msg
     = OnFetchContent (Result Http.Error Content)
     | OnInputSearchText String
     | SearchContent
+    | AddToBasket ContentInfo
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -34,14 +36,19 @@ update msg model =
         OnInputSearchText searchText ->
             ( { model | searchText = searchText}, Cmd.none)
         SearchContent ->
-            ( { content = Loading, searchText = "" }, fetchContent model.searchText)
+            ( { model | content = Loading, searchText = "" }, fetchContent model.searchText)
+        AddToBasket contentInfo ->
+            ( { model | basket = List.append model.basket [contentInfo] }, Cmd.none)
 
-rowItemInfo: ContentInfo -> Html msg
+rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =
     div []
-        [ text contentInfo.artistName ]
+        [
+            text (contentInfo.artistName ++ " "),
+            button [onClick (AddToBasket contentInfo)] [ text " + "] 
+        ]
 
-viewWithData : Content -> Html msg
+viewWithData : Content -> Html Msg
 viewWithData content =
     div []
         [
@@ -68,6 +75,7 @@ view model =
     in
     div [] [
         div [] [
+            text ("Busket" ++ String.fromInt (List.length model.basket)),
             input [
                 onInput OnInputSearchText,
                 value model.searchText,

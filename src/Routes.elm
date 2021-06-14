@@ -1,4 +1,4 @@
-module Routes exposing (Route(..), parseUrl)
+module Routes exposing (Route(..), parseUrl, pathFor)
 
 import Url exposing (Url)
 import Url.Parser exposing (..)
@@ -6,6 +6,7 @@ import Url.Parser exposing (..)
 
 type Route
     = HomeRoute
+    | BasketRoute
     | NotFoundRoute
 
 
@@ -14,6 +15,7 @@ matchers =
     oneOf
         [ map HomeRoute top
         , map HomeRoute (s "home")
+        , map BasketRoute (s "basket")
         ]
 
 
@@ -30,8 +32,6 @@ parseUrl url =
 pathFor : Route -> String
 pathFor route =
     case route of
-        HomeRoute ->
-            "/home"
-
-        NotFoundRoute ->
-            "/"
+        HomeRoute -> "/home"
+        BasketRoute -> "/basket"
+        NotFoundRoute -> "/"

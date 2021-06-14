@@ -16,9 +16,9 @@ type alias Model =
         basket: List ContentInfo
     }
 
-init : ( Model, Cmd Msg )
-init =
-    ( { content = NotAsked, searchText = "", basket = [] }, Cmd.none)
+init : List ContentInfo -> ( Model, Cmd Msg )
+init basket =
+    ( { content = NotAsked, searchText = "", basket = basket }, Cmd.none)
 
 type Msg
     = OnFetchContent (Result Http.Error Content)

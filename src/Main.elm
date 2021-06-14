@@ -2,23 +2,29 @@ module Main exposing (init, main, subscriptions)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
-import Html exposing (Html, div, section, text)
+import Html exposing (Html, div, section, text, a)
+import Html.Attributes exposing (..)
 import Pages.Home as Home
-import Routes exposing (Route)
+import Routes exposing (Route, pathFor)
 import Shared exposing (..)
 import Url exposing (Url)
-import Models.Content exposing (Content)
+import Models.Content exposing (Content, ContentInfo)
+import Debug exposing (..)
+import List exposing (length)
+import Pages.Basket as Basket
 
 type alias Model =
     { flags : Flags
     , navKey : Key
     , route : Route
     , page : Page
+    , basket: List ContentInfo
     }
 
 
 type Page
     = PageNone
+    | PageBasket Basket.Model
     | PageHome Home.Model
 
 
@@ -34,8 +40,8 @@ init flags url navKey =
             , navKey = navKey
             , route = Routes.parseUrl url
             , page = PageNone
+            , basket = []
             }, Cmd.none )
-
 
 loadCurrentPage : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 loadCurrentPage ( model, cmd ) =
@@ -44,12 +50,16 @@ loadCurrentPage ( model, cmd ) =
             case model.route of
                 Routes.HomeRoute ->
                     let
-                        ( pageModel, pageCmd) = Home.init
+                        ( pageModel, pageCmd) = Home.init model.basket
                     in
                     ( PageHome pageModel, Cmd.map HomeMsg pageCmd )
+                Routes.BasketRoute ->
+                    let
+                        (pageModel, pageCmd) = Basket.init model.basket
+                    in
+                        ( PageBasket pageModel, pageCmd )
 
-                Routes.NotFoundRoute ->
-                    ( PageNone, Cmd.none )
+                Routes.NotFoundRoute -> ( PageNone, Cmd.none )
     in
     ( { model | page = page }, Cmd.batch [ cmd, newCmd ] )
 
@@ -74,7 +84,8 @@ update msg model =
             let
                 ( newPageModel, newCmd ) = Home.update subMsg pageModel
             in
-            ( { model | page = PageHome newPageModel }, Cmd.map HomeMsg newCmd )
+            ( { model | page = PageHome newPageModel, basket = newPageModel.basket  }, Cmd.map HomeMsg newCmd )
+
         ( HomeMsg _, _ ) -> ( model, Cmd.none )
 
 main : Program Flags Model Msg
@@ -101,9 +112,16 @@ currentPage model =
         page =
             case model.page of
                 PageHome pageModel -> Html.map HomeMsg (Home.view pageModel)
+                PageBasket pageModel -> Basket.view pageModel
                 PageNone -> notFoundView
+        basketCount = length model.basket
     in
-    section [] [ page ]
+    section [] [
+        text (String.fromInt basketCount),
+        a [ href (pathFor Routes.HomeRoute) ] [text "Go to home"],
+        a [ href (pathFor Routes.BasketRoute) ] [text "Go to the basket"],
+        page
+        ]
 
 notFoundView : Html msg
 notFoundView =

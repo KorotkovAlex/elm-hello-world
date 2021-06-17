@@ -60,9 +60,10 @@ loadCurrentPage ( model, cmd ) =
                         (pageModel, pageCmd) = Basket.init model.basket
                     in
                         ( PageBasket pageModel, pageCmd )
-                Routes.DetailsRoute ->
+
+                Routes.DetailsRoute id ->
                     let
-                        (pageModel, pageCmd) = Details.init
+                        (pageModel, pageCmd) = Details.init id
                     in
                         ( PageDetails pageModel, pageCmd )
 
@@ -80,13 +81,11 @@ update msg model =
         ( OnUrlRequest urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
-                    Debug.log("dsasad")
                     ( model, Nav.pushUrl model.navKey (Url.toString url))
 
-                Browser.External url -> Debug.log("dsasad") ( model, Nav.load url )
+                Browser.External url -> ( model, Nav.load url )
 
         ( OnUrlChange url, _ ) ->
-            Debug.log("dsasad")
             loadCurrentPage ( { model | route = Routes.parseUrl url }, Cmd.none )
 
         ( HomeMsg subMsg, PageHome pageModel ) ->

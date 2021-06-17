@@ -7,6 +7,7 @@ import Url.Parser exposing (..)
 type Route
     = HomeRoute
     | BasketRoute
+    | DetailsRoute
     | NotFoundRoute
 
 
@@ -16,6 +17,7 @@ matchers =
         [ map HomeRoute top
         , map HomeRoute (s "home")
         , map BasketRoute (s "basket")
+        , map DetailsRoute (s "details")
         ]
 
 
@@ -34,4 +36,5 @@ pathFor route =
     case route of
         HomeRoute -> "/home"
         BasketRoute -> "/basket"
+        DetailsRoute -> "/details"
         NotFoundRoute -> "/"

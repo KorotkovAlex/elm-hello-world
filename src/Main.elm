@@ -12,6 +12,7 @@ import Models.Content exposing (Content, ContentInfo)
 import Debug exposing (..)
 import List exposing (length)
 import Pages.Basket as Basket
+import Pages.Details as Details
 
 type alias Model =
     { flags : Flags
@@ -25,6 +26,7 @@ type alias Model =
 type Page
     = PageNone
     | PageBasket Basket.Model
+    | PageDetails Details.Model
     | PageHome Home.Model
 
 
@@ -58,6 +60,11 @@ loadCurrentPage ( model, cmd ) =
                         (pageModel, pageCmd) = Basket.init model.basket
                     in
                         ( PageBasket pageModel, pageCmd )
+                Routes.DetailsRoute ->
+                    let
+                        (pageModel, pageCmd) = Details.init
+                    in
+                        ( PageDetails pageModel, pageCmd )
 
                 Routes.NotFoundRoute -> ( PageNone, Cmd.none )
     in
@@ -73,11 +80,13 @@ update msg model =
         ( OnUrlRequest urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
+                    Debug.log("dsasad")
                     ( model, Nav.pushUrl model.navKey (Url.toString url))
 
-                Browser.External url -> ( model, Nav.load url )
+                Browser.External url -> Debug.log("dsasad") ( model, Nav.load url )
 
         ( OnUrlChange url, _ ) ->
+            Debug.log("dsasad")
             loadCurrentPage ( { model | route = Routes.parseUrl url }, Cmd.none )
 
         ( HomeMsg subMsg, PageHome pageModel ) ->
@@ -113,6 +122,7 @@ currentPage model =
             case model.page of
                 PageHome pageModel -> Html.map HomeMsg (Home.view pageModel)
                 PageBasket pageModel -> Basket.view pageModel
+                PageDetails pageModel -> Details.view pageModel
                 PageNone -> notFoundView
         basketCount = length model.basket
     in

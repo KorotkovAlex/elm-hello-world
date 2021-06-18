@@ -34,6 +34,7 @@ type Msg
     = OnUrlChange Url
     | OnUrlRequest UrlRequest
     | HomeMsg Home.Msg
+    | DetailsMsg Details.Msg
 
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
@@ -65,7 +66,7 @@ loadCurrentPage ( model, cmd ) =
                     let
                         (pageModel, pageCmd) = Details.init id
                     in
-                        ( PageDetails pageModel, pageCmd )
+                        ( PageDetails pageModel, Cmd.map DetailsMsg pageCmd  )
 
                 Routes.NotFoundRoute -> ( PageNone, Cmd.none )
     in
@@ -94,7 +95,14 @@ update msg model =
             in
             ( { model | page = PageHome newPageModel, basket = newPageModel.basket  }, Cmd.map HomeMsg newCmd )
 
+        ( DetailsMsg subMsg, PageDetails pageModel ) ->
+            let
+                ( newPageModel, newCmd ) = Details.update subMsg pageModel
+            in
+            ( { model | page = PageDetails newPageModel }, Cmd.map DetailsMsg newCmd )
+
         ( HomeMsg _, _ ) -> ( model, Cmd.none )
+        ( DetailsMsg _, _ ) -> ( model, Cmd.none )
 
 main : Program Flags Model Msg
 main =
@@ -121,7 +129,7 @@ currentPage model =
             case model.page of
                 PageHome pageModel -> Html.map HomeMsg (Home.view pageModel)
                 PageBasket pageModel -> Basket.view pageModel
-                PageDetails pageModel -> Details.view pageModel
+                PageDetails pageModel -> Html.map DetailsMsg (Details.view pageModel)
                 PageNone -> notFoundView
         basketCount = length model.basket
     in

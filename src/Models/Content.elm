@@ -1,6 +1,7 @@
 module Models.Content exposing (Content, ContentInfo, decoder)
 
 import Json.Decode as Decode
+import Http exposing (track)
 
 
 type alias Content =
@@ -13,7 +14,9 @@ type alias ContentInfo =
     {
       artistName: String,
       artworkUrl100: String,
-      currency: String
+      currency: String,
+      trackId: Int,
+      trackName: String
     }
 
 decoder : Decode.Decoder Content
@@ -24,7 +27,9 @@ decoder =
 
 decoderContentInfo : Decode.Decoder ContentInfo
 decoderContentInfo =
-    Decode.map3 ContentInfo
+    Decode.map5 ContentInfo
         (Decode.field "artistName" Decode.string)
         (Decode.field "artworkUrl100" Decode.string)
         (Decode.field "currency" Decode.string)
+        (Decode.field "trackId" Decode.int)
+        (Decode.field "trackName" Decode.string)

@@ -102,7 +102,7 @@ fetchContent searchText =
         Http.header "Accept" "application/json",
         Http.header "Content-Type" "application/json"
     ]
-    , url = ("https://itunes.apple.com/search?term=" ++ searchText)
+    , url = ("https://itunes.apple.com/search?media=music&term=" ++ searchText)
     , body = Http.emptyBody
     , expect = Http.expectJson OnFetchContent decoder
     , timeout = Nothing

@@ -10,7 +10,7 @@ import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchInputLineStyle)
+import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle)
 
 type alias Model =
     {
@@ -64,13 +64,13 @@ viewWithData content =
 
 searchInputLiveView : Model -> Html Msg
 searchInputLiveView model =
-    div ([] ++ searchInputLineStyle) [
+    div ([] ++ searchContainerStyle) [
         input ([
             onInput OnInputSearchText,
             value model.searchText,
             placeholder "searchText"
-        ]) [],
-        button [onClick SearchContent] [ text "search"]
+        ] ++ searchInputLineStyle) [],
+        button ([onClick SearchContent] ++ searchButtonStyle) [ text "search"]
     ]
 
 contentView : Model -> Html Msg
@@ -84,9 +84,9 @@ contentView model =
 view : Model -> Html Msg
 view model =
     div [] [
-        div [] [
-            text ("Busket" ++ String.fromInt (List.length model.basket)),
-            searchInputLiveView model
+        div ([] ++ headerStyle) [
+            searchInputLiveView model,
+            text ("Busket" ++ String.fromInt (List.length model.basket))
         ],
         contentView model
     ]

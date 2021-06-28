@@ -2,15 +2,15 @@ module Pages.Home exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onInput, onClick)
-import Html.Attributes exposing (value)
-import Html.Attributes exposing (placeholder)
+import Html.Attributes exposing (placeholder, src, href, value)
 
 import Http
 import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle)
+import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, bucketContainerStyle)
+import Routes exposing (Route, pathFor)
 
 type alias Model =
     {
@@ -86,7 +86,8 @@ view model =
     div [] [
         div ([] ++ headerStyle) [
             searchInputLiveView model,
-            text ("Busket" ++ String.fromInt (List.length model.basket))
+            div ([] ++ bucketContainerStyle) [
+            a [ href (pathFor Routes.BasketRoute) ] [text ("Bucket " ++ String.fromInt (List.length model.basket))]]
         ],
         contentView model
     ]

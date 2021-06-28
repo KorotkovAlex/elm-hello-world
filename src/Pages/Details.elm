@@ -2,6 +2,7 @@ module Pages.Details exposing (..)
 import Html exposing (..)
 import Models.Content exposing (Content, decoder)
 import Http exposing (..)
+
 import Shared exposing (..)
 type alias Model =
     {

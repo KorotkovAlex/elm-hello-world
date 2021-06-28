@@ -2,12 +2,14 @@ module Pages.Home exposing (..)
 
 import Html exposing (..)
 import Http
-import Models.Content exposing (Content, ContentInfo, decoder)
 import Shared exposing (..)
 import String exposing(..)
 import Html.Events exposing (onInput, onClick)
 import Html.Attributes exposing (value)
 import Html.Attributes exposing (placeholder)
+
+import Models.Content exposing (Content, ContentInfo, decoder)
+import Styles.Common exposing (searchInputLineStyle)
 
 type alias Model =
     {
@@ -40,6 +42,8 @@ update msg model =
         AddToBasket contentInfo ->
             ( { model | basket = List.append model.basket [contentInfo] }, Cmd.none)
 
+
+-- View
 rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =
     div []
@@ -56,37 +60,35 @@ viewWithData content =
             div [] (List.map rowItemInfo content.results)
         ]
 
+
+searchInputLiveView : Model -> Html Msg
+searchInputLiveView model =
+    div ([] ++ searchInputLineStyle) [
+        input ([
+            onInput OnInputSearchText,
+            value model.searchText,
+            placeholder "searchText"
+        ]) [],
+        button [onClick SearchContent] [ text "search"]
+    ]
+
+contentView : Model -> Html Msg
+contentView model =
+    case model.content of
+        NotAsked -> text ""
+        Loading -> text "Loading ..."
+        Loaded items -> viewWithData items
+        Failure -> text "Error"
+
 view : Model -> Html Msg
 view model =
-    let
-        content =
-            case model.content of
-                NotAsked ->
-                    text ""
-
-                Loading ->
-                    text "Loading ..."
-
-                Loaded items ->
-                    viewWithData items
-
-                Failure ->
-                    text "Error"
-    in
     div [] [
         div [] [
             text ("Busket" ++ String.fromInt (List.length model.basket)),
-            input [
-                onInput OnInputSearchText,
-                value model.searchText,
-                placeholder "searchText"] []
-            ],
-            div [] [
-                        button [onClick SearchContent]
-                        [ text "Search"]
-                    ],
-            content
-        ]
+            searchInputLiveView model
+        ],
+        contentView model
+    ]
 
 
 -- DATA

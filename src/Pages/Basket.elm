@@ -1,9 +1,10 @@
 module Pages.Basket exposing (..)
 
 import Html exposing (..)
-import Models.Content exposing (ContentInfo)
 import List exposing (length)
-import Pages.Home exposing (Msg)
+
+import Models.Content exposing (ContentInfo)
+
 
 type alias Model =
     {

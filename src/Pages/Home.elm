@@ -1,13 +1,14 @@
 module Pages.Home exposing (..)
 
 import Html exposing (..)
-import Http
-import Shared exposing (..)
-import String exposing(..)
 import Html.Events exposing (onInput, onClick)
 import Html.Attributes exposing (value)
 import Html.Attributes exposing (placeholder)
 
+import Http
+import String exposing(..)
+
+import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
 import Styles.Common exposing (searchInputLineStyle)
 

@@ -1,8 +1,6 @@
 module Models.Content exposing (Content, ContentInfo, decoder)
 
 import Json.Decode as Decode
-import Http exposing (track)
-
 
 type alias Content =
     {

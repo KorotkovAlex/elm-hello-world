@@ -4,15 +4,18 @@ import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
 import Html exposing (Html, div, section, text, a)
 import Html.Attributes exposing (..)
-import Pages.Home as Home
-import Routes exposing (Route, pathFor)
-import Shared exposing (..)
 import Url exposing (Url)
-import Models.Content exposing (Content, ContentInfo)
 import Debug exposing (..)
 import List exposing (length)
+
+import Models.Content exposing (ContentInfo)
+
 import Pages.Basket as Basket
 import Pages.Details as Details
+import Pages.Home as Home
+
+import Routes exposing (Route, pathFor)
+import Shared exposing (..)
 
 type alias Model =
     { flags : Flags

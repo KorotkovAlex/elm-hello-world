@@ -12,7 +12,7 @@ import Models.Content exposing (Content, ContentInfo, decoder)
 import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle)
 import Routes exposing (Route, pathFor)
 import Asset
-
+import Component.Content as Content exposing (..)
 type alias Model =
     {
         searchText: String,
@@ -28,7 +28,14 @@ type Msg
     = OnFetchContent (Result Http.Error Content)
     | OnInputSearchText String
     | SearchContent
-    | AddToBasket ContentInfo
+    | ContentMsg Content.Msg
+
+
+contentComponentUpdate : Content.Msg -> Model -> ( Model, Cmd Msg )
+contentComponentUpdate msg model =
+    case msg of
+        AddToBasket contentInfo ->
+            ( { model | basket = List.append model.basket [contentInfo] }, Cmd.none)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -41,18 +48,13 @@ update msg model =
             ( { model | searchText = searchText}, Cmd.none)
         SearchContent ->
             ( { model | content = Loading, searchText = "" }, fetchContent model.searchText)
-        AddToBasket contentInfo ->
-            ( { model | basket = List.append model.basket [contentInfo] }, Cmd.none)
+        ContentMsg subMsg -> contentComponentUpdate subMsg model
 
 
 -- View
 rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =
-    div []
-        [
-            text (contentInfo.artistName ++ " "),
-            button [onClick (AddToBasket contentInfo)] [ text " + "] 
-        ]
+    Html.map ContentMsg (Content.view contentInfo)
 
 viewWithData : Content -> Html Msg
 viewWithData content =

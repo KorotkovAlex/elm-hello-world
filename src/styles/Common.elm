@@ -33,23 +33,23 @@ searchButtonStyle =
       style "color" "white"
     ]
 
-bucketContainerStyle : List (Attribute msg)
-bucketContainerStyle =
+basketContainerStyle : List (Attribute msg)
+basketContainerStyle =
     [
       style "justify-self" "flex-end",
       style "align-self" "center",
       style "margin-left" "50px"
     ]
 
-bucketImageStyle : List (Attribute msg)
-bucketImageStyle =
+basketImageStyle : List (Attribute msg)
+basketImageStyle =
     [
       style "position" "relative"
     ]
 
 
-bucketCounterStyle : List (Attribute msg)
-bucketCounterStyle =
+basketCounterStyle : List (Attribute msg)
+basketCounterStyle =
   [
     style "position" "absolute",
     style "bottom" "-3px",

@@ -1,4 +1,4 @@
-module Asset exposing (Image, src, bucketIcon, searchIcon)
+module Asset exposing (Image, src, basketIcon, searchIcon)
 
 {-| Assets, such as images, videos, and audio. (We only have images for now.)
 We should never expose asset URLs directly; this module should be in charge of
@@ -16,9 +16,9 @@ type Image
 
 -- IMAGES
 
-bucketIcon : Image
-bucketIcon =
-    image "bucket.svg"
+basketIcon : Image
+basketIcon =
+    image "basket.svg"
 
 searchIcon : Image
 searchIcon =

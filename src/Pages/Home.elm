@@ -9,7 +9,7 @@ import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, bucketContainerStyle, bucketImageStyle, bucketCounterStyle)
+import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle)
 import Routes exposing (Route, pathFor)
 import Asset
 
@@ -84,14 +84,14 @@ contentView model =
         Loaded items -> viewWithData items
         Failure -> text "Error"
 
-bucketView : Model -> Html Msg
-bucketView model =
-    div ([] ++ bucketContainerStyle) [
+basketView : Model -> Html Msg
+basketView model =
+    div ([] ++ basketContainerStyle) [
         a [ href (pathFor Routes.BasketRoute) ]
         [
-            div ([] ++ bucketImageStyle) [
-                img [ Asset.src Asset.bucketIcon, width 30, height 30] [],
-                div ([] ++ bucketCounterStyle) [
+            div ([] ++ basketImageStyle) [
+                img [ Asset.src Asset.basketIcon, width 30, height 30] [],
+                div ([] ++ basketCounterStyle) [
                     text (String.fromInt (List.length model.basket))
                 ]
             ]
@@ -102,7 +102,7 @@ view model =
     div [] [
         div ([] ++ headerStyle) [
             searchInputLiveView model,
-            bucketView model
+            basketView model
         ],
         contentView model
     ]

@@ -18,7 +18,6 @@ init basket =
 view : Model -> Html msg
 view model =
   div [] [
-    text "!!!!!!!!!Basket \n",
     text (String.fromInt (length model.basket)),
     div [] (List.map rowItemInfo model.basket)
   ]

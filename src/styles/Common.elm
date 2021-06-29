@@ -38,9 +38,23 @@ bucketContainerStyle =
     [
       style "justify-self" "flex-end",
       style "align-self" "center",
-      style "margin-left" "50px",
-      style "color" blueColor
+      style "margin-left" "50px"
     ]
+
+bucketImageStyle : List (Attribute msg)
+bucketImageStyle =
+    [
+      style "position" "relative"
+    ]
+
+
+bucketCounterStyle : List (Attribute msg)
+bucketCounterStyle =
+  [
+    style "position" "absolute",
+    style "bottom" "-3px",
+    style "right" "-5px"
+  ]
 
 headerStyle : List (Attribute msg)
 headerStyle =

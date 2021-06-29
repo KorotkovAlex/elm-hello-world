@@ -4,6 +4,7 @@
   "description": "",
   "main": "api.js",
   "dependencies": {
+    "elm-live": "^4.0.2",
     "express": "^4.17.1",
     "font-awesome": "4",
     "foreman": "^3.0.1",
@@ -15,10 +16,8 @@
     "parcel-bundler": "^1.10.3"
   },
   "scripts": {
-    "api": "json-server --watch db.json --port 4000",
     "build": "elm make ./src/Main.elm --output dist/app.js",
-    "client": "parcel -p 8080 src/app.html",
-    "start": "nf start"
+    "start": "elm-live src/Main.elm --open --start-page=dist/app.html -- --output dist/app.js"
   },
   "repository": {
     "type": "git",

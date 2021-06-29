@@ -2,15 +2,16 @@ module Pages.Home exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onInput, onClick)
-import Html.Attributes exposing (placeholder, src, href, value)
+import Html.Attributes exposing (placeholder, src, href, value, height, width)
 
 import Http
 import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, bucketContainerStyle)
+import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, bucketContainerStyle, bucketImageStyle, bucketCounterStyle)
 import Routes exposing (Route, pathFor)
+import Asset
 
 type alias Model =
     {
@@ -70,7 +71,9 @@ searchInputLiveView model =
             value model.searchText,
             placeholder "searchText"
         ] ++ searchInputLineStyle) [],
-        button ([onClick SearchContent] ++ searchButtonStyle) [ text "search"]
+        button ([onClick SearchContent] ++ searchButtonStyle) [
+            img [ Asset.src Asset.searchIcon, width 30, height 30] []
+        ]
     ]
 
 contentView : Model -> Html Msg
@@ -81,13 +84,25 @@ contentView model =
         Loaded items -> viewWithData items
         Failure -> text "Error"
 
+bucketView : Model -> Html Msg
+bucketView model =
+    div ([] ++ bucketContainerStyle) [
+        a [ href (pathFor Routes.BasketRoute) ]
+        [
+            div ([] ++ bucketImageStyle) [
+                img [ Asset.src Asset.bucketIcon, width 30, height 30] [],
+                div ([] ++ bucketCounterStyle) [
+                    text (String.fromInt (List.length model.basket))
+                ]
+            ]
+        ]
+    ]
 view : Model -> Html Msg
 view model =
     div [] [
         div ([] ++ headerStyle) [
             searchInputLiveView model,
-            div ([] ++ bucketContainerStyle) [
-            a [ href (pathFor Routes.BasketRoute) ] [text ("Bucket " ++ String.fromInt (List.length model.basket))]]
+            bucketView model
         ],
         contentView model
     ]

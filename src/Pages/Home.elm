@@ -9,7 +9,7 @@ import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle)
+import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle, contentGridStyle)
 import Routes exposing (Route, pathFor)
 import Asset
 import Component.Content as Content exposing (..)
@@ -22,7 +22,7 @@ type alias Model =
 
 init : List ContentInfo -> ( Model, Cmd Msg )
 init basket =
-    ( { content = NotAsked, searchText = "", basket = basket }, Cmd.none)
+    ( { content = NotAsked, searchText = "elm", basket = basket }, Cmd.none)
 
 type Msg
     = OnFetchContent (Result Http.Error Content)
@@ -58,11 +58,7 @@ rowItemInfo contentInfo =
 
 viewWithData : Content -> Html Msg
 viewWithData content =
-    div []
-        [
-            text (String.fromInt content.resultCount),
-            div [] (List.map rowItemInfo content.results)
-        ]
+    div ([] ++ contentGridStyle) (List.map rowItemInfo content.results)
 
 
 searchInputLiveView : Model -> Html Msg

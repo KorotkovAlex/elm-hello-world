@@ -1,10 +1,8 @@
 module Styles.Common exposing (..)
 import Html exposing (Attribute)
 import Html.Attributes exposing (style)
+import Styles.Colors exposing (blueColor)
 
-
-blueColor : String
-blueColor = "rgb(18, 147, 216)"
 
 searchContainerStyle : List (Attribute msg)
 searchContainerStyle =
@@ -64,3 +62,15 @@ headerStyle =
     , style "width" "100%"
     , style "justify-content" "center"
     ]
+
+contentGridStyle : List (Attribute msg)
+contentGridStyle =
+  [
+    style "display" "grid",
+    style "grid-template-columns" "repeat(4, 1fr)",
+    style "margin" "5em",
+    style "grid-column-gap" "2em",
+    style "grid-row-gap" "2em",
+    style "align-content" "center",
+    style "justify-content" "center"
+  ]

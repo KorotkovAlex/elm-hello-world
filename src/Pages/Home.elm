@@ -36,6 +36,7 @@ contentComponentUpdate msg model =
     case msg of
         AddToBasket contentInfo ->
             ( { model | basket = List.append model.basket [contentInfo] }, Cmd.none)
+        RemoveFromBasket contentInfo -> ( model, Cmd.none)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -54,7 +55,7 @@ update msg model =
 -- View
 rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =
-    Html.map ContentMsg (Content.view contentInfo)
+    Html.map ContentMsg (Content.view contentInfo False)
 
 viewWithData : Content -> Html Msg
 viewWithData content =

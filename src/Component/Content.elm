@@ -7,18 +7,23 @@ import Html.Attributes exposing (src)
 
 import Styles.Content exposing (..)
 
-type Msg = AddToBasket ContentInfo
+type Msg = AddToBasket ContentInfo | RemoveFromBasket ContentInfo
 
-view : ContentInfo -> Html Msg
-view contentInfo =
+showButtonView : ContentInfo -> Bool -> Html Msg
+showButtonView contentInfo isShowRemoveButton  =
+  if isShowRemoveButton then
+    button ([onClick (RemoveFromBasket contentInfo)] ++ addToBasketButtonStyle) [ text " - "]
+  else
+    button ([onClick (AddToBasket contentInfo)] ++ addToBasketButtonStyle) [ text " + "]
+
+view : ContentInfo -> Bool -> Html Msg
+view contentInfo isShowRemoveButton =
     div ([] ++ contentContainer) [
       div ([] ++ contentImageContainer) [
         img ([src contentInfo.artworkUrl100] ++ contentImage) []
       ],
       div ([] ++ contentInfoContainer) [
         text contentInfo.artistName,
-        div [] [
-          button ([onClick (AddToBasket contentInfo)] ++ addToBasketButtonStyle) [ text " + "]
-        ]
+        showButtonView contentInfo isShowRemoveButton
       ]
     ]

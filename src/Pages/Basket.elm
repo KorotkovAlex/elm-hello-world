@@ -4,7 +4,10 @@ import Html exposing (..)
 import List exposing (length)
 
 import Models.Content exposing (ContentInfo)
+import Component.Content as Content exposing(..)
+import Styles.Common exposing (contentGridStyle)
 
+type Msg =  ContentMsg Content.Msg
 
 type alias Model =
     {
@@ -14,17 +17,27 @@ type alias Model =
 init : List ContentInfo -> ( Model, Cmd msg )
 init basket =
     ( { basket = basket }, Cmd.none)
+-- List.append model.basket [contentInfo]
 
-view : Model -> Html msg
+filteContent : ContentInfo -> ContentInfo -> Bool
+filteContent content content2 =
+    content == content2
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        ContentMsg subMsg ->
+            case subMsg of
+                AddToBasket _ ->
+                    ( model, Cmd.none)
+                RemoveFromBasket contentInfo ->
+                    ( { model | basket = List.filter ( \content -> contentInfo.trackId /= content.trackId)  model.basket }, Cmd.none)
+
+
+view : Model -> Html Msg
 view model =
-  div [] [
-    text (String.fromInt (length model.basket)),
-    div [] (List.map rowItemInfo model.basket)
-  ]
+    div ([] ++ contentGridStyle) (List.map rowItemInfo model.basket)
 
-rowItemInfo: ContentInfo -> Html msg
+rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =
-    div []
-        [
-            text (contentInfo.artistName ++ " ")
-        ]
+    Html.map ContentMsg (Content.view contentInfo True)

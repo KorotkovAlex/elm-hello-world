@@ -8,7 +8,7 @@ import Url exposing (Url)
 import Debug exposing (..)
 
 import Models.Content exposing (ContentInfo)
-
+import Component.Content as Content
 import Pages.Basket as Basket
 import Pages.Details as Details
 import Pages.Home as Home
@@ -39,6 +39,7 @@ type Msg
     | OnUrlRequest UrlRequest
     | HomeMsg Home.Msg
     | DetailsMsg Details.Msg
+    | BasketMsg Basket.Msg
 
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
@@ -99,6 +100,12 @@ update msg model =
             in
             ( { model | page = PageHome newPageModel, basket = newPageModel.basket  }, Cmd.map HomeMsg newCmd )
 
+        ( BasketMsg subMsg, PageBasket pageModel ) ->
+            let
+                ( newPageModel, newCmd ) = Basket.update subMsg pageModel
+            in
+            ( { model | page = PageBasket newPageModel, basket = newPageModel.basket  }, Cmd.map BasketMsg newCmd )
+
         ( DetailsMsg subMsg, PageDetails pageModel ) ->
             let
                 ( newPageModel, newCmd ) = Details.update subMsg pageModel
@@ -107,6 +114,7 @@ update msg model =
 
         ( HomeMsg _, _ ) -> ( model, Cmd.none )
         ( DetailsMsg _, _ ) -> ( model, Cmd.none )
+        ( BasketMsg _, _ ) -> ( model, Cmd.none )
 
 main : Program Flags Model Msg
 main =
@@ -136,7 +144,7 @@ currentPage model =
         page =
             case model.page of
                 PageHome pageModel -> Html.map HomeMsg (Home.view pageModel)
-                PageBasket pageModel -> Basket.view pageModel
+                PageBasket pageModel -> Html.map BasketMsg  (Basket.view pageModel)
                 PageDetails pageModel -> Html.map DetailsMsg (Details.view pageModel)
                 PageNone -> notFoundView
     in

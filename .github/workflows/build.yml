@@ -16,7 +16,6 @@ jobs:
         uses: jorelali/setup-elm@v3
         with:
           elm-version: 0.19.1
-      - run: elm install
       - run: elm make ./src/Main.elm --output dist/app.js
 
       - name: Deploy 🚀

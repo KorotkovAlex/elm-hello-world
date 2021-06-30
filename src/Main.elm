@@ -2,11 +2,10 @@ module Main exposing (init, main, subscriptions)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
-import Html exposing (Html, div, section, text, a)
+import Html exposing (Html, div, text)
 import Html.Attributes exposing (..)
 import Url exposing (Url)
 import Debug exposing (..)
-import List exposing (length)
 
 import Models.Content exposing (ContentInfo)
 
@@ -14,8 +13,10 @@ import Pages.Basket as Basket
 import Pages.Details as Details
 import Pages.Home as Home
 
-import Routes exposing (Route, pathFor)
+import Routes exposing (Route)
 import Shared exposing (..)
+
+import Styles.Common exposing (mainContainerStyle)
 
 type alias Model =
     { flags : Flags
@@ -125,6 +126,10 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "App", body = [ currentPage model ] }
 
+notFoundView : Html msg
+notFoundView =
+    div [] [ text "Not found" ]
+
 currentPage : Model -> Html Msg
 currentPage model =
     let
@@ -134,15 +139,5 @@ currentPage model =
                 PageBasket pageModel -> Basket.view pageModel
                 PageDetails pageModel -> Html.map DetailsMsg (Details.view pageModel)
                 PageNone -> notFoundView
-        basketCount = length model.basket
     in
-    section [] [
-        text (String.fromInt basketCount),
-        a [ href (pathFor Routes.HomeRoute) ] [text "Go to home"],
-        a [ href (pathFor Routes.BasketRoute) ] [text "Go to the basket"],
-        page
-        ]
-
-notFoundView : Html msg
-notFoundView =
-    div [] [ text "Not found" ]
+    div ([] ++ mainContainerStyle) [page]

@@ -3,6 +3,11 @@ import Html exposing (Attribute)
 import Html.Attributes exposing (style)
 import Styles.Colors exposing (blueColor)
 
+mainContainerStyle : List (Attribute msg)
+mainContainerStyle =
+  [
+    style "margin-top" "25px"
+  ]
 
 searchContainerStyle : List (Attribute msg)
 searchContainerStyle =

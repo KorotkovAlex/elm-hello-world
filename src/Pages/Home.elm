@@ -22,7 +22,7 @@ type alias Model =
 
 init : List ContentInfo -> ( Model, Cmd Msg )
 init basket =
-    ( { content = NotAsked, searchText = "elm", basket = basket }, Cmd.none)
+    ( { content = NotAsked, searchText = "", basket = basket }, Cmd.none)
 
 type Msg
     = OnFetchContent (Result Http.Error Content)
@@ -48,7 +48,7 @@ update msg model =
         OnInputSearchText searchText ->
             ( { model | searchText = searchText}, Cmd.none)
         SearchContent ->
-            ( { model | content = Loading, searchText = "" }, fetchContent model.searchText)
+            ( { model | content = Loading }, fetchContent model.searchText)
         ContentMsg subMsg -> contentComponentUpdate subMsg model
 
 
@@ -68,7 +68,7 @@ searchInputLiveView model =
         input ([
             onInput OnInputSearchText,
             value model.searchText,
-            placeholder "searchText"
+            placeholder "Введите текст"
         ] ++ searchInputLineStyle) [],
         button ([onClick SearchContent] ++ searchButtonStyle) [
             img [ Asset.src Asset.searchIcon, width 30, height 30] []

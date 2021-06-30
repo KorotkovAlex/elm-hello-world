@@ -5,7 +5,7 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (src)
 
-import Styles.Content exposing (..)
+import Styles.Common exposing (..)
 
 type Msg = AddToBasket ContentInfo | RemoveFromBasket ContentInfo
 

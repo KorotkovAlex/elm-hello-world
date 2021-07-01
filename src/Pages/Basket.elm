@@ -5,7 +5,7 @@ import List exposing (length)
 
 import Models.Content exposing (ContentInfo)
 import Component.Content as Content exposing(..)
-import Styles.Common as CommonStyles
+import Common as CommonStyles
 
 type Msg =  ContentMsg Content.Msg
 

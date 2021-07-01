@@ -1,4 +1,4 @@
-module Styles.Colors exposing (..)
+module Colors exposing (..)
 
 
 blueColor : String

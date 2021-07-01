@@ -9,7 +9,7 @@ import String exposing(..)
 
 import Shared exposing (..)
 import Models.Content exposing (Content, ContentInfo, decoder)
-import Styles.Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle, contentGridStyle)
+import Common exposing (searchContainerStyle, headerStyle, searchInputLineStyle, searchButtonStyle, basketContainerStyle, basketImageStyle, basketCounterStyle, contentGridStyle)
 import Routes exposing (Route, pathFor)
 import Asset
 import Component.Content as Content exposing (..)

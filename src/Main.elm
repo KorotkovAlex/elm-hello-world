@@ -16,7 +16,7 @@ import Pages.Home as Home
 import Routes exposing (Route)
 import Shared exposing (..)
 
-import Styles.Common exposing (mainContainerStyle)
+import Common exposing (mainContainerStyle)
 
 type alias Model =
     { flags : Flags

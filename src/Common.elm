@@ -1,7 +1,7 @@
-module Styles.Common exposing (..)
+module Common exposing (..)
 import Html exposing (Attribute)
 import Html.Attributes exposing (style)
-import Styles.Colors exposing (blueColor, whiteColor)
+import Colors exposing (blueColor, whiteColor)
 
 mainContainerStyle : List (Attribute msg)
 mainContainerStyle =

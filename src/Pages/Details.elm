@@ -3,7 +3,7 @@ module Pages.Details exposing (..)
 import Html exposing (..)
 import Http exposing (..)
 
-import Models.Content exposing (Content, decoder)
+import Models.Content as ContentModel exposing(Content)
 import Shared exposing (..)
 
 type alias Model =
@@ -61,7 +61,7 @@ fetchContent id =
     ]
     , url = ("https://itunes.apple.com/lookup?id=" ++ String.fromInt id)
     , body = Http.emptyBody
-    , expect = Http.expectJson OnFetchContent decoder
+    , expect = Http.expectJson OnFetchContent ContentModel.decoder
     , timeout = Nothing
     , tracker = Nothing
     }

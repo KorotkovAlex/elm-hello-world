@@ -5,24 +5,24 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (src)
 
-import Styles.Common exposing (..)
+import Styles.Common as CommonStyles
 
 type Msg = AddToBasket ContentInfo | RemoveFromBasket ContentInfo
 
 showButtonView : ContentInfo -> Bool -> Html Msg
 showButtonView contentInfo isShowRemoveButton  =
   if isShowRemoveButton then
-    button ([onClick (RemoveFromBasket contentInfo)] ++ addToBasketButtonStyle) [ text " - "]
+    button ([onClick (RemoveFromBasket contentInfo)] ++ CommonStyles.addToBasketButtonStyle) [ text " - "]
   else
-    button ([onClick (AddToBasket contentInfo)] ++ addToBasketButtonStyle) [ text " + "]
+    button ([onClick (AddToBasket contentInfo)] ++ CommonStyles.addToBasketButtonStyle) [ text " + "]
 
 view : ContentInfo -> Bool -> Html Msg
 view contentInfo isShowRemoveButton =
-    div ([] ++ contentContainer) [
-      div ([] ++ contentImageContainer) [
-        img ([src contentInfo.artworkUrl100] ++ contentImage) []
+    div ([] ++ CommonStyles.contentContainer) [
+      div ([] ++ CommonStyles.contentImageContainer) [
+        img ([src contentInfo.artworkUrl100] ++ CommonStyles.contentImage) []
       ],
-      div ([] ++ contentInfoContainer) [
+      div ([] ++ CommonStyles.contentInfoContainer) [
         text contentInfo.artistName,
         showButtonView contentInfo isShowRemoveButton
       ]

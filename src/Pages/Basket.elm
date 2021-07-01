@@ -5,7 +5,7 @@ import List exposing (length)
 
 import Models.Content exposing (ContentInfo)
 import Component.Content as Content exposing(..)
-import Styles.Common exposing (contentGridStyle)
+import Styles.Common as CommonStyles
 
 type Msg =  ContentMsg Content.Msg
 
@@ -36,7 +36,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div ([] ++ contentGridStyle) (List.map rowItemInfo model.basket)
+    div ([] ++ CommonStyles.contentGridStyle) (List.map rowItemInfo model.basket)
 
 rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =

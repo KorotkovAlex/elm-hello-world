@@ -21,7 +21,6 @@ jobs:
 
       - name: Make
         run: elm make ./src/Main.elm --output app.js
-        run: ls
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

@@ -35,7 +35,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div ([] ++ CommonStyles.contentGridStyle) (List.map rowItemInfo model.basket)
+    div [] [
+        text "basket",
+        div ([] ++ CommonStyles.contentGridStyle) (List.map rowItemInfo model.basket)
+    ]
 
 rowItemInfo: ContentInfo -> Html Msg
 rowItemInfo contentInfo =

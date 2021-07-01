@@ -1,25 +1,37 @@
-name: Build and Deployuild
+name: github pages
 
 on:
   push:
     branches:
-      - "master"
+      - main
+  pull_request:
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-18.04
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+      - uses: actions/checkout@v2
 
-      - name: Install elm
-        uses: jorelali/setup-elm@v3
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          elm-version: 0.19.1
-      - run: elm make ./src/Main.elm --output dist/app.js
+          node-version: '14'
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+      - name: Setup Elm
+        run: npm install elm --global
+
+      - name: Make
+        run: elm make ./src/Main.elm --output app.js
+
+      - name: Move files
+        run: |
+          mkdir ./public
+          mv ./index.html ./public/
+          mv ./app.js ./public/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master'
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: .
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

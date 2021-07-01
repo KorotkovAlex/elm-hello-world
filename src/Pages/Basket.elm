@@ -1,7 +1,6 @@
 module Pages.Basket exposing (..)
 
 import Html exposing (..)
-import List exposing (length)
 
 import Models.Content exposing (ContentInfo)
 import Component.Content as Content exposing(..)

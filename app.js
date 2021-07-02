@@ -6405,21 +6405,23 @@ var $elm$url$Url$Parser$slash = F2(
 					parseBefore(state));
 			});
 	});
+var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
+	function (state) {
+		return _List_fromArray(
+			[state]);
+	});
 var $author$project$Routes$matchers = $elm$url$Url$Parser$oneOf(
 	_List_fromArray(
 		[
+			A2($elm$url$Url$Parser$map, $author$project$Routes$HomeRoute, $elm$url$Url$Parser$top),
 			A2(
 			$elm$url$Url$Parser$map,
 			$author$project$Routes$HomeRoute,
-			$elm$url$Url$Parser$s('elm-hello-world')),
-			A2(
-			$elm$url$Url$Parser$map,
-			$author$project$Routes$HomeRoute,
-			$elm$url$Url$Parser$s('elm-hello-world/home')),
+			$elm$url$Url$Parser$s('home')),
 			A2(
 			$elm$url$Url$Parser$map,
 			$author$project$Routes$BasketRoute,
-			$elm$url$Url$Parser$s('elm-hello-world/basket')),
+			$elm$url$Url$Parser$s('basket')),
 			A2(
 			$elm$url$Url$Parser$map,
 			$author$project$Routes$DetailsRoute,
@@ -7015,15 +7017,8 @@ var $author$project$Pages$Basket$rowItemInfo = function (contentInfo) {
 var $author$project$Pages$Basket$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				$elm$html$Html$text('basket'),
-				A2(
-				$elm$html$Html$div,
-				_Utils_ap(_List_Nil, $author$project$Common$contentGridStyle),
-				A2($elm$core$List$map, $author$project$Pages$Basket$rowItemInfo, model.basket))
-			]));
+		_Utils_ap(_List_Nil, $author$project$Common$contentGridStyle),
+		A2($elm$core$List$map, $author$project$Pages$Basket$rowItemInfo, model.basket));
 };
 var $author$project$Pages$Details$renderContent = function (model) {
 	var _v0 = model.content;
@@ -7091,12 +7086,12 @@ var $elm$html$Html$Attributes$href = function (url) {
 var $author$project$Routes$pathFor = function (route) {
 	switch (route.$) {
 		case 'HomeRoute':
-			return '/elm-hello-world';
+			return '/home';
 		case 'BasketRoute':
-			return '/elm-hello-world/basket';
+			return '/basket';
 		case 'DetailsRoute':
 			var id = route.a;
-			return '/elm-hello-world/details/' + $elm$core$String$fromInt(id);
+			return 'details/' + $elm$core$String$fromInt(id);
 		default:
 			return '/';
 	}

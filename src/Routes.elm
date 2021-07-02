@@ -13,9 +13,9 @@ type Route
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ map HomeRoute (s "elm-hello-world")
-        , map HomeRoute (s "elm-hello-world/home")
-        , map BasketRoute (s "elm-hello-world/basket")
+        [ map HomeRoute top
+        , map HomeRoute (s "home")
+        , map BasketRoute (s "basket")
         , map DetailsRoute (s "details" </> int)
         ]
 
@@ -33,7 +33,7 @@ parseUrl url =
 pathFor : Route -> String
 pathFor route =
     case route of
-        HomeRoute -> "/elm-hello-world"
-        BasketRoute -> "/elm-hello-world/basket"
-        DetailsRoute id -> "/elm-hello-world/details/" ++ String.fromInt id
+        HomeRoute -> "/home"
+        BasketRoute -> "/basket"
+        DetailsRoute id -> "details/" ++ String.fromInt id
         NotFoundRoute -> "/"
